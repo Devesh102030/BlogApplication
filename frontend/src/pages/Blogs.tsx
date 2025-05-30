@@ -5,8 +5,21 @@ import { BlogSkeleton } from "../componenets/BlogSkeleton"
 import type { Blog } from "../hooks"
 import { useState } from "react"
 import { Footer } from "../componenets/Footer"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 export const Blogs = ()=>{
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+        navigate("/login"); // redirect to login page
+        }
+    }, [navigate]);
+    
+
     const {loading, blogs} = useBlogs();
 
     if(loading){
