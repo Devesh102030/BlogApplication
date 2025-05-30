@@ -6,6 +6,9 @@ import { BACKEND_URL } from "../config"
 import { useNavigate } from "react-router-dom"
 
 export const Auth = ({type} : {type: "signup" | "signin"})=>{
+
+    const [loading,setloading] = useState(false);
+
     const [postInputs, setpostInputs] = useState<SignUpObject>({
         name: "",
         email: "",
@@ -15,7 +18,7 @@ export const Auth = ({type} : {type: "signup" | "signin"})=>{
     const navigate = useNavigate();
 
     async function sendRequest(){
-        console.log(postInputs);
+        setloading(true);
         try{
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type==="signup"?"signup":"signin"}`,postInputs);
             const jwt = response.data.jwt;
@@ -26,7 +29,11 @@ export const Auth = ({type} : {type: "signup" | "signin"})=>{
             console.log(e);
             alert("Error while signing up")
         }
+        finally{
+            setloading(false);
+        }
     }
+
     return(
         <div className="flex justify-center flex-col h-screen">
             <div className="flex justify-center">
@@ -66,7 +73,13 @@ export const Auth = ({type} : {type: "signup" | "signin"})=>{
 
                     <div className="bg-gray-950 mt-6 rounded-md  flex justify-center flex-col">
                         <button onClick={sendRequest} className="h-12 text-white font-semibold">  
-                            {type === "signup" ? "Sign Up" : "Login"}
+                            {loading ? (
+                                <div className="flex items-center justify-center">
+                                    Loading...
+                                </div>
+                            ) : (
+                                type === "signup" ? "Sign Up" : "Login"
+                            )}
                         </button>
                     </div>
                 </div>
@@ -93,3 +106,4 @@ function LabelledInput({label, placeholder, onChange, type}: LabelledInputType){
         </div>
     )
 }
+

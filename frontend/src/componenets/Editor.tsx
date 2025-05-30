@@ -5,12 +5,35 @@ import axios from 'axios';
 import { BACKEND_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function BlogEditor() {
   
   const [title,settitle] = useState("");
   const [content,setcontent] = useState("");
+  const [loading,setloading] = useState(false);
 
   const navigate = useNavigate();
+
+  async function handler(){
+    setloading(true);
+    try{
+      const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
+        title,
+        content
+      }, 
+      {
+        headers: {
+            Authorization: localStorage.getItem("token")
+          }
+      });
+      navigate(`/blog/${response.data.id}`)
+  
+    }catch{
+
+    }finally{
+      setloading(false);
+    }
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
@@ -20,19 +43,8 @@ export default function BlogEditor() {
       <ContentEditor onChange={(temp)=>{
         setcontent(temp);
       }}/>
-      <button onClick={async () => {
-        const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
-          title,
-          content
-        }, 
-        {
-          headers: {
-              Authorization: localStorage.getItem("token")
-            }
-        });
-          navigate(`/blog/${response.data.id}`)
-      }} type="submit" className="mt-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-          Publish post
+      <button onClick={handler} type="submit" className="mt-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+          {loading ? "Posting..." : "Publish post"}
       </button>
     </div>
   );
