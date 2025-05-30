@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+  // url      = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDFKV0IwOFQ1NzdWWFpNVlg5N0NHOUdCQzMiLCJ0ZW5hbnRfaWQiOiI4MWYyYTVjZmIxNjY5OTNjOTQ4MTI1YWE4NTZjZTI1OTQxYmU4ZDZkNDAyOTQxMGMyZjdkMGY0YThmMmRhYjMxIiwiaW50ZXJuYWxfc2VjcmV0IjoiODNlNGJjZDAtODJlNi00YjJlLWFmOWMtMTAyYmQzMWY0ODk2In0.Ii8nKz1mWgL2sM9ji90XazwO_K4sEDWRWbr06CYgFKc" // ← This won't actually be used, so dummy is fine
+  // directUrl = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id        String @id @default(uuid())
+  email     String @unique
+  name      String?
+  password  String
+  posts     Post[]
+}
+
+model Post{
+  id String @id @default(uuid())
+  title String
+  content String
+  published Boolean @default(false)
+  authorid String
+  author User @relation(fields: [authorid], references: [id])
+}
