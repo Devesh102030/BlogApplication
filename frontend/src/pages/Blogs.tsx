@@ -38,12 +38,15 @@ export const Blogs = ()=>{
     }
     return(
         
-        <div>
-            <Appbar/>
-            <LoadBlogs blogs={blogs}></LoadBlogs>
-            <Footer/>
-        </div>
-        
+        <div className="flex flex-col min-h-screen">
+            <Appbar />
+            
+            <main className="flex-grow">
+                <LoadBlogs blogs={blogs} />
+            </main>
+
+            <Footer />
+        </div>    
     )
 }
 

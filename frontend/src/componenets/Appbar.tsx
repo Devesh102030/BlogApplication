@@ -3,8 +3,8 @@ import { useState } from "react";
 
 export const Appbar = () => {
     return <div className="border-b flex justify-between px-10 py-4">
-        <Link to={'/blogs'} className="flex flex-col justify-center cursor-pointer text-2xl">
-                Medium
+        <Link to={'/blogs'} className="flex flex-col font-semibold justify-center cursor-pointer text-2xl">
+                Scribly
         </Link>
         <div>
             <Link to={`/publish`}>
